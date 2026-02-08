@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Projets GSB (Galaxy Swiss Bourdin) de Dimitri Rey - Résilience Réseau L2/L3 et Détection d'intrusions. Épreuve E5 BTS SIO SISR.">
+  <meta name="author" content="Dimitri Rey">
+
+  <title>Projets GSB | Dimitri Rey - Portfolio BTS SIO SISR</title>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%233b82f6' rx='20' width='100' height='100'/><text x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='system-ui'>DR</text></svg>">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .tab-container {
+      display: flex;
+      gap: var(--space-2);
+      margin-bottom: var(--space-8);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: var(--space-4);
+    }
+
+    .tab-btn {
+      padding: var(--space-3) var(--space-6);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      position: relative;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: var(--surface);
+    }
+
+    .tab-btn--active {
+      color: var(--accent);
+      background: var(--surface);
+    }
+
+    .tab-btn--active::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel--active {
+      display: block;
+    }
+
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-4) 0;
+      font-size: var(--text-sm);
+    }
+
+    .info-table th {
+      background: var(--accent);
+      color: white;
+      padding: var(--space-3) var(--space-4);
+      text-align: left;
+      font-weight: 500;
+    }
+
+    .info-table td {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .info-table tr:hover td {
+      background: var(--surface);
+    }
+
+    .risk-critical { color: #ef4444; font-weight: 600; }
+    .risk-major { color: #f59e0b; font-weight: 600; }
+    .risk-high { color: #f97316; font-weight: 600; }
+
+    .obj-ref {
+      color: var(--accent);
+      font-weight: 600;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+    }
+
+    .schema-img {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .schema-img:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 9999;
+      cursor: zoom-out;
+      justify-content: center;
+      align-items: center;
+      padding: var(--space-4);
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 95%;
+      max-height: 95vh;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+    }
+
+    .lightbox__close {
+      position: absolute;
+      top: var(--space-4);
+      right: var(--space-4);
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: var(--space-2);
+    }
+
+    .zone-title {
+      color: var(--accent);
+      font-size: var(--text-base);
+      font-weight: 600;
+      margin: var(--space-6) 0 var(--space-3);
+      padding-bottom: var(--space-2);
+      border-bottom: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-overlay"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header__inner">
+        <a href="index.html" class="header__logo">
+          <span class="header__logo-icon">DR</span>
+          <span>Dimitri Rey</span>
+        </a>
+
+        <nav class="nav">
+          <a href="index.html" class="nav__link">Accueil</a>
+          <a href="a-propos.html" class="nav__link">À propos</a>
+          <a href="cv.html" class="nav__link">CV</a>
+          <a href="oelis.html" class="nav__link">Oelis</a>
+          <a href="competences.html" class="nav__link">Compétences</a>
+          <a href="projets.html" class="nav__link">Projets</a>
+          <a href="veille.html" class="nav__link">Veille</a>
+          <a href="gsb.html" class="nav__link nav__link--active">GSB</a>
+          <div class="nav__cta">
+            <a href="contact.html" class="btn btn--primary">Contact</a>
+          </div>
+        </nav>
+
+        <button class="menu-toggle" aria-label="Menu">
+          <span class="menu-toggle__bar"></span>
+          <span class="menu-toggle__bar"></span>
+          <span class="menu-toggle__bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main style="padding-top: 72px;">
+    <!-- Hero -->
+    <section class="bg-secondary">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-header__label">Épreuve E5 - BTS SIO SISR</span>
+          <h1 class="section-header__title">Projets GSB</h1>
+          <p class="section-header__description">
+            Galaxy Swiss Bourdin — Deux projets d'infrastructure réseau et cybersécurité
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div class="card fade-in" style="border-left: 4px solid var(--accent);">
+            <h3 class="card__title">
+              <svg width="24" height="24" fill="none" stroke="var(--accent)" viewBox="0 0 24 24" style="display: inline; vertical-align: middle; margin-right: var(--space-2);">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z"/>
+              </svg>
+              Résilience Réseau L2/L3
+            </h3>
+            <p class="card__description">
+              Mise en place d'une infrastructure réseau résiliente avec Spanning Tree, HSRP, EtherChannel et routage inter-sites pour garantir la haute disponibilité.
+            </p>
+          </div>
+
+          <div class="card fade-in" style="border-left: 4px solid var(--success);">
+            <h3 class="card__title">
+              <svg width="24" height="24" fill="none" stroke="var(--success)" viewBox="0 0 24 24" style="display: inline; vertical-align: middle; margin-right: var(--space-2);">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z"/>
+              </svg>
+              Détection d'intrusions
+            </h3>
+            <p class="card__description">
+              Mise en place d'une solution de détection des tentatives d'accès non autorisées avec NFTables et le SIEM Wazuh pour l'analyse des logs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contexte entreprise -->
+    <section>
+      <div class="container container--narrow">
+        <div class="card fade-in" style="margin-bottom: var(--space-8);">
+          <h3 style="font-size: var(--text-lg); color: var(--text-primary); margin-bottom: var(--space-4);">
+            <svg width="20" height="20" fill="none" stroke="var(--accent)" viewBox="0 0 24 24" style="display: inline; vertical-align: middle; margin-right: var(--space-2);">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+            Galaxy Swiss Bourdin (GSB)
+          </h3>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-4); font-size: var(--text-sm); line-height: 1.7;">
+            Galaxy Swiss Bourdin (GSB) est un groupe industriel spécialisé dans la métallurgie et la transformation des métaux, issu de la fusion entre Galaxy (entreprise française) et le groupe Swiss Bourdin (groupe suisse). Cette entité opère dans un secteur où la disponibilité des systèmes d'information est critique pour la continuité des chaînes de production et le pilotage des processus industriels.
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3);">
+            <div style="background: var(--surface); padding: var(--space-3); border-radius: var(--radius-md);">
+              <span style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Secteur</span>
+              <p style="color: var(--text-primary); font-weight: 500; font-size: var(--text-sm); margin-top: var(--space-1);">Industrie métallurgique</p>
+            </div>
+            <div style="background: var(--surface); padding: var(--space-3); border-radius: var(--radius-md);">
+              <span style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Sites</span>
+              <p style="color: var(--text-primary); font-weight: 500; font-size: var(--text-sm); margin-top: var(--space-1);">1 DC (dual-WAN) + 2 bâtiments</p>
+            </div>
+            <div style="background: var(--surface); padding: var(--space-3); border-radius: var(--radius-md);">
+              <span style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Criticité SI</span>
+              <p style="color: var(--text-primary); font-weight: 500; font-size: var(--text-sm); margin-top: var(--space-1);">Haute — SLA 99,9% requis</p>
+            </div>
+            <div style="background: var(--surface); padding: var(--space-3); border-radius: var(--radius-md);">
+              <span style="font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Enjeu principal</span>
+              <p style="color: var(--text-primary); font-weight: 500; font-size: var(--text-sm); margin-top: var(--space-1);">Continuité d'activité</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="bg-secondary">
+      <div class="container">
+        <div class="tab-container fade-in">
+          <button class="tab-btn tab-btn--active" data-tab="resilience">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: inline; vertical-align: middle; margin-right: var(--space-2);">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z"/>
+            </svg>
+            Résilience Réseau L2/L3
+          </button>
+          <button class="tab-btn" data-tab="intrusion">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: inline; vertical-align: middle; margin-right: var(--space-2);">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z"/>
+            </svg>
+            Détection d'intrusions
+          </button>
+        </div>
+
+        <!-- Tab Résilience Réseau -->
+        <div id="resilience" class="tab-panel tab-panel--active">
+          <div class="veille-section fade-in">
+            <h2 class="veille-section__title">Résilience Réseau L2/L3 — Infrastructure réseau haute disponibilité</h2>
+
+            <div class="veille-section__content">
+              <h3>1. Contexte et problématique</h3>
+              <p>
+                L'infrastructure réseau actuelle de GSB présente des vulnérabilités critiques en termes de résilience. L'absence de mécanismes de redondance au niveau des couches 2 (commutation) et 3 (routage) du modèle OSI expose l'entreprise à des risques majeurs d'interruption de service en cas de défaillance d'un équipement réseau ou d'une liaison.
+              </p>
+
+              <table class="info-table">
+                <thead>
+                  <tr>
+                    <th>Constat</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Absence de redondance L2</strong></td>
+                    <td>Une panne d'un switch central provoque l'isolement complet d'un ou plusieurs segments réseau, sans basculement automatique.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Point unique de défaillance (SPOF)</strong></td>
+                    <td>Les liaisons entre les switches d'accès et le coeur de réseau ne disposent pas de chemins alternatifs.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Pas de protocole de résilience L3</strong></td>
+                    <td>Le routage inter-VLAN repose sur un seul équipement sans mécanisme de bascule HSRP / VRRP.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Risque métier élevé</strong></td>
+                    <td>Toute interruption réseau impacte directement les activités de production industrielle, supervision SCADA, logistique et gestion administrative.</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>2. Risques identifiés</h3>
+              <p>Sans mise en place d'une infrastructure résiliente, GSB s'expose à plusieurs risques opérationnels et financiers :</p>
+
+              <table class="info-table">
+                <thead>
+                  <tr>
+                    <th>Risque</th>
+                    <th>Sévérité</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Interruption de production</strong></td>
+                    <td><span class="risk-critical">Critique</span></td>
+                    <td>Arrêt des fours, laminoirs et lignes de production en cas de panne réseau prolongée.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Perte de données</strong></td>
+                    <td><span class="risk-major">Majeur</span></td>
+                    <td>Inaccessibilité des serveurs AD-DNS et DHCP impactant l'authentification et l'adressage.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Non-conformité réglementaire</strong></td>
+                    <td><span class="risk-major">Majeur</span></td>
+                    <td>Les normes industrielles (ISO 9001, ISO 14001) exigent une disponibilité continue des systèmes.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Impact financier</strong></td>
+                    <td><span class="risk-high">Élevé</span></td>
+                    <td>Coût estimé d'une interruption non planifiée : plusieurs milliers d'euros par heure d'indisponibilité.</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>3. Objectifs du projet</h3>
+              <p>La direction des systèmes d'information de GSB souhaite mettre en place une infrastructure réseau résiliente garantissant la haute disponibilité des services informatiques.</p>
+
+              <table class="info-table">
+                <thead>
+                  <tr>
+                    <th>Réf.</th>
+                    <th>Objectif</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="obj-ref">OBJ-01</span></td>
+                    <td><strong>Résilience Layer 2</strong></td>
+                    <td>Implémenter une topologie Spanning Tree - RSTP / Rapid-PVST+ pour assurer la redondance des chemins de commutation et l'élimination des boucles réseau.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="obj-ref">OBJ-02</span></td>
+                    <td><strong>Haute disponibilité L3</strong></td>
+                    <td>Déployer un mécanisme HSRP sur les switches core (3560) pour garantir la continuité du routage inter-VLAN en cas de défaillance d'un équipement.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="obj-ref">OBJ-03</span></td>
+                    <td><strong>Redondance des liaisons</strong></td>
+                    <td>Mettre en place des doubles liens (uplinks) entre les switches d'accès et les switches core, ainsi que des liaisons EtherChannel fibre entre les switches core.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="obj-ref">OBJ-04</span></td>
+                    <td><strong>Routage inter-sites</strong></td>
+                    <td>Concevoir une architecture de routage entre le Data Center et les deux bâtiments via des routeurs dédiés (2911), avec double accès internet (dual-WAN).</td>
+                  </tr>
+                  <tr>
+                    <td><span class="obj-ref">OBJ-05</span></td>
+                    <td><strong>Redondance DC</strong></td>
+                    <td>Déployer deux switches core DC (SW-DC-1 / SW-DC-2) en HSRP avec liens croisés vers les bâtiments.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="obj-ref">OBJ-06</span></td>
+                    <td><strong>Adressage dual-stack</strong></td>
+                    <td>Déployer une infrastructure en double pile IPv4/IPv6 sur l'ensemble des zones, garantissant la compatibilité actuelle et la pérennité de l'adressage réseau.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="obj-ref">OBJ-07</span></td>
+                    <td><strong>Documentation complète</strong></td>
+                    <td>Produire une documentation technique exhaustive couvrant l'architecture, le plan d'adressage, les connexions et les configurations.</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>4. Architecture cible</h3>
+              <p>Le périmètre du projet couvre trois zones distinctes, chacune ayant des rôles et des niveaux de criticité spécifiques :</p>
+
+              <div style="margin: var(--space-6) 0;">
+                <img src="assets/images/GSB_Synoptique_Infra_L2_L3.png" alt="Synoptique Infrastructure Réseau GSB - Architecture Résiliente L2/L3 avec Data Center, Bâtiment A et Bâtiment B" class="schema-img" onclick="openLightbox(this.src)">
+                <p style="font-size: var(--text-xs); color: var(--text-muted); margin-top: var(--space-2); text-align: center;">Synoptique Infrastructure Réseau — Cliquer pour agrandir</p>
+              </div>
+
+              <h4 class="zone-title">Zone Data Center (DC)</h4>
+              <table class="info-table">
+                <thead>
+                  <tr>
+                    <th>Équipement</th>
+                    <th>Modèle</th>
+                    <th>Rôle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>R-TETE</strong></td>
+                    <td>Cisco 2911</td>
+                    <td>Routeur de tête dual-WAN - 2 liens internet (FAI-1 / FAI-2)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SW-DC-1</strong></td>
+                    <td>Cisco 3560</td>
+                    <td>Switch core DC 1 - HSRP Active</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SW-DC-2</strong></td>
+                    <td>Cisco 3560</td>
+                    <td>Switch core DC 2 - HSRP Standby</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SRV-AD-DNS</strong></td>
+                    <td>Serveur</td>
+                    <td>Active Directory et DNS</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SRV-DHCP</strong></td>
+                    <td>Serveur</td>
+                    <td>Attribution dynamique d'adresses IP</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h4 class="zone-title">Zone Bâtiment A</h4>
+              <table class="info-table">
+                <thead>
+                  <tr>
+                    <th>Équipement</th>
+                    <th>Modèle</th>
+                    <th>Rôle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>R-BAT-A</strong></td>
+                    <td>Cisco 2911</td>
+                    <td>Routeur bâtiment A - liaison vers DC</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SW-CORE-A1</strong></td>
+                    <td>Cisco 3560</td>
+                    <td>Switch core 1 - HSRP Active</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SW-CORE-A2</strong></td>
+                    <td>Cisco 3560</td>
+                    <td>Switch core 2 - HSRP Standby</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SW-A1 / SW-A2 / SW-A3</strong></td>
+                    <td>Cisco 2960</td>
+                    <td>Switches d'accès - utilisateurs</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h4 class="zone-title">Zone Bâtiment B</h4>
+              <table class="info-table">
+                <thead>
+                  <tr>
+                    <th>Équipement</th>
+                    <th>Modèle</th>
+                    <th>Rôle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>R-BAT-B</strong></td>
+                    <td>Cisco 2911</td>
+                    <td>Routeur bâtiment B - liaison vers DC</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SW-CORE-B1</strong></td>
+                    <td>Cisco 3560</td>
+                    <td>Switch core 1 - HSRP Active</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SW-CORE-B2</strong></td>
+                    <td>Cisco 3560</td>
+                    <td>Switch core 2 - HSRP Standby</td>
+                  </tr>
+                  <tr>
+                    <td><strong>SW-B1 / SW-B2 / SW-B3</strong></td>
+                    <td>Cisco 2960</td>
+                    <td>Switches d'accès - utilisateurs</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>5. Exigences techniques</h3>
+              <table class="info-table">
+                <thead>
+                  <tr>
+                    <th>Composant</th>
+                    <th>Exigence technique</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Spanning Tree</strong></td>
+                    <td>RSTP (802.1w) ou Rapid-PVST+ pour une convergence rapide. Désignation manuelle du Root Bridge sur les switches core avec priorité basse (4096). Activation de BPDU Guard sur les ports utilisateurs et Root Guard sur les ports inter-switches.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>HSRP</strong></td>
+                    <td>Déploiement de HSRP sur les paires de switches core 3560 dans chaque bâtiment. Configuration d'une IP virtuelle partagée comme passerelle par défaut pour chaque VLAN, avec préemption activée.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>EtherChannel</strong></td>
+                    <td>Agrégation de liens fibre entre les deux switches core de chaque bâtiment pour augmenter la bande passante et assurer la redondance du lien inter-core.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Routage L3</strong></td>
+                    <td>Routage inter-VLAN sur les switches L3 (3560) avec ip routing activé. Routage inter-sites via les routeurs 2911 (R-TETE, R-BAT-A, R-BAT-B) avec OSPF ou routes statiques.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Redondance WAN</strong></td>
+                    <td>Le routeur R-TETE dispose de deux interfaces WAN connectées à deux FAI distincts. En cas de défaillance d'un lien, le trafic bascule automatiquement via IP SLA et route tracking.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Dual-stack IPv4/IPv6</strong></td>
+                    <td>Déploiement en double pile sur tous les équipements L3. Attribution IPv4 via DHCP et IPv6 via DHCPv6 ou SLAAC. Configuration HSRP en IPv4 et IPv6 (HSRPv2). DNS configuré pour résoudre les enregistrements A (IPv4) et AAAA (IPv6).</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h3>6. Contraintes et limites</h3>
+              <ul>
+                <li><strong>Environnement de simulation</strong> : Le projet est réalisé sur Cisco Packet Tracer, ce qui limite certaines fonctionnalités avancées (MSTP, certaines options EtherChannel).</li>
+                <li><strong>Équipements disponibles</strong> : Les modèles utilisés (2911, 3560, 2960) sont ceux disponibles dans Packet Tracer et représentatifs d'une infrastructure Cisco PME/ETI.</li>
+                <li><strong>Pare-feu et sécurité périmétrique</strong> : Non couvert dans cette maquette. ACL de base uniquement.</li>
+                <li><strong>Monitoring et supervision</strong> : Pas de solution SNMP / Syslog / NMS dans le périmètre initial.</li>
+              </ul>
+            </div>
+
+            <div style="margin-top: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-3);">
+              <span class="tag tag--accent">Cisco 2911</span>
+              <span class="tag tag--accent">Cisco 3560</span>
+              <span class="tag tag--accent">Cisco 2960</span>
+              <span class="tag tag--accent">RSTP / Rapid-PVST+</span>
+              <span class="tag tag--accent">HSRP</span>
+              <span class="tag tag--accent">EtherChannel</span>
+              <span class="tag tag--accent">OSPF</span>
+              <span class="tag tag--accent">IPv4 / IPv6</span>
+              <span class="tag tag--accent">Packet Tracer</span>
+              <span class="tag tag--accent">VLAN</span>
+              <span class="tag tag--accent">IP SLA</span>
+            </div>
+
+            <div class="card" style="margin-top: var(--space-6); background: var(--surface);">
+              <h4 style="font-size: var(--text-base); color: var(--text-primary); margin-bottom: var(--space-3);">Compétences BTS SIO mobilisées</h4>
+              <dl style="font-size: var(--text-sm); color: var(--text-secondary);">
+                <dt style="color: var(--accent); font-weight: 500;">Bloc 2 — Administration des systèmes et des réseaux</dt>
+                <dd style="margin-bottom: var(--space-2); padding-left: var(--space-4);">Concevoir une solution d'infrastructure réseau</dd>
+                <dd style="margin-bottom: var(--space-2); padding-left: var(--space-4);">Installer, tester et déployer une solution d'infrastructure réseau</dd>
+                <dd style="margin-bottom: var(--space-2); padding-left: var(--space-4);">Exploiter, dépanner et superviser une solution d'infrastructure réseau</dd>
+
+                <dt style="color: var(--accent); font-weight: 500; margin-top: var(--space-4);">Bloc 1 — Support et mise à disposition de services informatiques</dt>
+                <dd style="margin-bottom: var(--space-2); padding-left: var(--space-4);">Gérer le patrimoine informatique</dd>
+                <dd style="padding-left: var(--space-4);">Travailler en mode projet</dd>
+              </dl>
+            </div>
+
+            <div style="margin-top: var(--space-6); text-align: center;">
+              <a href="assets/documents/GSB_Contexte_Besoin_Reaseaux_L2-L3.pdf" target="_blank" rel="noopener noreferrer" class="btn btn--primary btn--lg">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: inline; vertical-align: middle; margin-right: var(--space-2);">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span>Télécharger le document complet (PDF)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Détection d'intrusions -->
+        <div id="intrusion" class="tab-panel">
+          <div class="veille-section fade-in">
+            <h2 class="veille-section__title">Détection d'intrusions — NFTables & Wazuh SIEM</h2>
+
+            <div class="veille-section__content">
+              <h3>1. Contexte et problématique</h3>
+              <p>
+                Dans le cadre de la sécurisation de l'infrastructure réseau de GSB, il est essentiel de mettre en place des mécanismes de détection et de filtrage des tentatives d'accès non autorisées depuis internet. L'entreprise, exposée via sa connexion dual-WAN, doit pouvoir identifier et bloquer les menaces en temps réel.
+              </p>
+              <p>
+                <strong>Comment détecter et bloquer efficacement les tentatives d'intrusion sur l'infrastructure réseau de GSB, tout en maintenant une visibilité complète sur les événements de sécurité ?</strong>
+              </p>
+
+              <h3>2. Objectifs</h3>
+              <ul>
+                <li><strong>Filtrage réseau</strong> : Mettre en place un pare-feu NFTables pour contrôler les flux entrants et sortants</li>
+                <li><strong>Détection d'intrusions</strong> : Déployer une solution de détection des tentatives d'accès non autorisées</li>
+                <li><strong>Centralisation des logs</strong> : Agréger et analyser les logs de sécurité via un SIEM</li>
+                <li><strong>Alertes en temps réel</strong> : Être notifié des événements de sécurité critiques</li>
+              </ul>
+
+              <h3>3. Solution mise en place</h3>
+
+              <h4 style="color: var(--accent); margin-top: var(--space-4);">NFTables — Pare-feu Linux</h4>
+              <p>NFTables est le successeur d'iptables dans le noyau Linux. Il offre une syntaxe unifiée et des performances améliorées pour le filtrage de paquets.</p>
+              <ul>
+                <li>Configuration de règles de filtrage IP (entrée/sortie)</li>
+                <li>Stateful inspection pour le suivi des connexions</li>
+                <li>Filtrage par protocole, port et adresse source/destination</li>
+                <li>Journalisation des paquets bloqués pour analyse</li>
+              </ul>
+
+              <h4 style="color: var(--success); margin-top: var(--space-4);">Wazuh SIEM — Détection et analyse</h4>
+              <p>Wazuh est une plateforme open-source de détection des menaces, de monitoring d'intégrité et de réponse aux incidents.</p>
+              <ul>
+                <li>Collecte et analyse des logs du pare-feu NFTables</li>
+                <li>Détection d'intrusions basée sur des règles et des signatures</li>
+                <li>Tableau de bord centralisé pour la visualisation des alertes</li>
+                <li>Corrélation d'événements de sécurité</li>
+              </ul>
+
+              <h3>4. Architecture</h3>
+              <div style="margin: var(--space-6) 0;">
+                <img src="assets/documents/Plans_Wazuh_nftable.png" alt="Schéma d'architecture - Détection d'intrusions avec NFTables et Wazuh SIEM : Routeur ISP + NFTables, SIEM Wazuh, serveur web NGINX, PC Client, DMZ et LAN" class="schema-img" onclick="openLightbox(this.src)">
+                <p style="font-size: var(--text-xs); color: var(--text-muted); margin-top: var(--space-2); text-align: center;">Schéma d'architecture — Cliquer pour agrandir</p>
+              </div>
+
+              <h3>5. Technologies utilisées</h3>
+            </div>
+
+            <div style="margin-top: var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-3);">
+              <span class="tag tag--accent">NFTables</span>
+              <span class="tag tag--accent">Wazuh SIEM</span>
+              <span class="tag tag--accent">Linux</span>
+              <span class="tag tag--accent">Filtrage IP</span>
+              <span class="tag tag--accent">Logs</span>
+              <span class="tag tag--accent">IDS</span>
+              <span class="tag tag--accent">Monitoring</span>
+            </div>
+
+            <div class="card" style="margin-top: var(--space-6); background: var(--surface);">
+              <h4 style="font-size: var(--text-base); color: var(--text-primary); margin-bottom: var(--space-3);">Compétences BTS SIO mobilisées</h4>
+              <dl style="font-size: var(--text-sm); color: var(--text-secondary);">
+                <dt style="color: var(--accent); font-weight: 500;">Bloc 3 — Cybersécurité des services informatiques</dt>
+                <dd style="margin-bottom: var(--space-2); padding-left: var(--space-4);">Sécuriser les équipements et les usages des utilisateurs</dd>
+                <dd style="margin-bottom: var(--space-2); padding-left: var(--space-4);">Garantir la disponibilité, l'intégrité et la confidentialité des services</dd>
+                <dd style="margin-bottom: var(--space-2); padding-left: var(--space-4);">Assurer la cybersécurité d'une infrastructure réseau</dd>
+
+                <dt style="color: var(--accent); font-weight: 500; margin-top: var(--space-4);">Bloc 2 — Administration des systèmes et des réseaux</dt>
+                <dd style="padding-left: var(--space-4);">Exploiter, dépanner et superviser une solution d'infrastructure réseau</dd>
+              </dl>
+            </div>
+
+            <div class="card" style="margin-top: var(--space-6); background: var(--surface); border-left: 4px solid var(--warning);">
+              <p style="color: var(--text-secondary); font-size: var(--text-sm);">
+                <svg width="18" height="18" fill="none" stroke="var(--warning)" viewBox="0 0 24 24" style="display: inline; vertical-align: middle; margin-right: var(--space-2);">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
+                </svg>
+                <strong>Projet en cours</strong> — Cette section sera complétée au fur et à mesure de l'avancement du projet avec l'architecture détaillée, les configurations et les résultats obtenus.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section>
+      <div class="container">
+        <div class="card card--glass text-center fade-in" style="padding: var(--space-12);">
+          <h2 class="section-header__title mb-4">Ces projets vous intéressent ?</h2>
+          <p class="section-header__description mb-8">
+            N'hésitez pas à me contacter pour échanger sur ces réalisations techniques.
+          </p>
+          <div class="flex justify-center gap-4">
+            <a href="contact.html" class="btn btn--primary btn--lg">
+              <span>Me contacter</span>
+            </a>
+            <a href="competences.html" class="btn btn--secondary btn--lg">
+              <span>Mes compétences</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__logo">
+            <span class="header__logo-icon">DR</span>
+            <span>Dimitri Rey</span>
+          </a>
+          <p class="footer__description">
+            Technicien Systèmes et Réseaux en alternance. BTS SIO SISR chez Oelis, Saint-Étienne.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer__title">Navigation</h4>
+          <ul class="footer__links">
+            <li><a href="index.html" class="footer__link">Accueil</a></li>
+            <li><a href="a-propos.html" class="footer__link">À propos</a></li>
+            <li><a href="cv.html" class="footer__link">CV</a></li>
+            <li><a href="projets.html" class="footer__link">Projets</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__title">BTS SIO</h4>
+          <ul class="footer__links">
+            <li><a href="oelis.html" class="footer__link">Entreprise</a></li>
+            <li><a href="competences.html" class="footer__link">Compétences</a></li>
+            <li><a href="veille.html" class="footer__link">Veille techno</a></li>
+            <li><a href="gsb.html" class="footer__link">Projets GSB</a></li>
+            <li><a href="contact.html" class="footer__link">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer__title">Contact</h4>
+          <ul class="footer__links">
+            <li><a href="mailto:pro@dimitri-rey.fr" class="footer__link">pro@dimitri-rey.fr</a></li>
+            <li><a href="https://www.linkedin.com/in/dimitri-rey-7610662a2/" target="_blank" rel="noopener noreferrer" class="footer__link">LinkedIn</a></li>
+            <li><span class="footer__link">Saint-Étienne, France</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copyright">
+          &copy; 2026 Dimitri Rey. Portfolio BTS SIO SISR.
+        </p>
+        <div class="footer__socials">
+          <a href="https://www.linkedin.com/in/dimitri-rey-7610662a2/" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="LinkedIn">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/dimitri-rey" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="GitHub">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox__close" aria-label="Fermer">&times;</button>
+    <img id="lightbox-img" src="" alt="Image agrandie">
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    function openLightbox(src) {
+      var lb = document.getElementById('lightbox');
+      document.getElementById('lightbox-img').src = src;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      var lb = document.getElementById('lightbox');
+      lb.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
