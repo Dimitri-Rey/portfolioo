@@ -15,7 +15,9 @@
       "Bash(git commit:*)",
       "Bash(xdg-open:*)",
       "Bash(pdftoppm:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(pip install:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }
